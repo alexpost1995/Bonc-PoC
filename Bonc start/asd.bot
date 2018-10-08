@@ -1,0 +1,15 @@
+{
+    "name": "asd",
+    "description": "",
+    "secretKey": "",
+    "services": [
+        {
+            "appId": "",
+            "id": "d2ff97a0-bb4a-11e8-b217-d1c2013be3ef",
+            "type": "endpoint",
+            "appPassword": "",
+            "endpoint": "localhost:3979/api/messages",
+            "name": "localhost:3979/api/messages"
+        }
+    ]
+}
