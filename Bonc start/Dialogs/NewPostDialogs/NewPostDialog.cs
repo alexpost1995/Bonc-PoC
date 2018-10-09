@@ -34,23 +34,29 @@ namespace Bonc_start.Dialogs.NewPostDialogs
             Options response = await activity;
             if (response.ToString() == "Facebook")
             {
-                context.Call<object>(new Dialogs.NewPostDialogs.FacebookPostDialog(), ChildDialogComplete);
+                context.Call<object>(new Dialogs.NewPostDialogs.FacebookPostDialog(), DialogComplete);
             }
             if (response.ToString() == "Instagram")
             {
+                await context.PostAsync("Deze functionaliteit is nog niet geimplementeerd.");
+                context.Call<object>(new Dialogs.NewPostDialogs.NewPostDialog(), DialogComplete);
                 //context.Call<object>(new Dialogs.NewPostDialogs.InstagramPostDialog(), ChildDialogComplete);
             }
             if (response.ToString() == "LinkedIn")
             {
+                await context.PostAsync("Deze functionaliteit is nog niet geimplementeerd.");
+                context.Call<object>(new Dialogs.NewPostDialogs.NewPostDialog(), DialogComplete);
                 //context.Call<object>(new Dialogs.NewPostDialogs.LinkedinPostDialog(), ChildDialogComplete);
             }
             if (response.ToString() == "Twitter")
             {
+                await context.PostAsync("Deze functionaliteit is nog niet geimplementeerd.");
+                context.Call<object>(new Dialogs.NewPostDialogs.NewPostDialog(), DialogComplete);
                 //context.Call<object>(new Dialogs.NewPostDialogs.TwitterPostDialog(), ChildDialogComplete);
             }
         }
 
-        public virtual async Task ChildDialogComplete(IDialogContext context, IAwaitable<object> response)
+        public virtual async Task DialogComplete(IDialogContext context, IAwaitable<object> response)
         {
             context.Done(this);
         }

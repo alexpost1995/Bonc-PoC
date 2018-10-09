@@ -1,4 +1,0 @@
-﻿text = {
-    "promptText" : "Ik zie dat je een nieuw bericht wil posten. Kies een van de volgende opties",
-    "promptTextFail" : "Kies een van de bovenstaande opties"
- }

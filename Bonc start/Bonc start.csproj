@@ -142,7 +142,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="default.htm" />
-    <Content Include="Dialogs\NewPostDialogs\TextFile1.txt" />
     <Content Include="Global.asax" />
     <Content Include="Bonc_start.bot" />
     <Content Include="Web.config">
