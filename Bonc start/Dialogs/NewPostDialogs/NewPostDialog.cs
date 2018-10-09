@@ -9,12 +9,18 @@ namespace Bonc_start.Dialogs.NewPostDialogs
     [Serializable]
     public class NewPostDialog : IDialog<object>
     {
+
         private string welcomeMessage = "Je hebt gekozen om een nieuw bericht te plaatsen";
         private string promptText = "Ik zie dat je een nieuw bericht wil posten. Kies een van de volgende opties";
         private string promptTextFail = "Kies een van de bovenstaande opties";
  
-    public async Task StartAsync(IDialogContext context)
 
+    /// <summary>
+    /// Shows welcome message and displays the options prompt.
+    /// </summary>
+    /// <param name="context"></param>
+    /// <returns></returns>
+    public async Task StartAsync(IDialogContext context)
         {
             await context.PostAsync(welcomeMessage);
 
@@ -26,9 +32,15 @@ namespace Bonc_start.Dialogs.NewPostDialogs
                 retry: promptTextFail,
                 promptStyle: PromptStyle.Auto
                 );
-            //return Task.CompletedTask;
         }
           
+        /// <summary>
+        /// Waits for the user's choice and forwards to the correct dialog.
+        /// For now only Facebook is implemented.
+        /// </summary>
+        /// <param name="context"></param>
+        /// <param name="activity"></param>
+        /// <returns></returns>
         public virtual async Task ChoiceReceivedAsync(IDialogContext context, IAwaitable<Options> activity)
         {
             Options response = await activity;
@@ -56,11 +68,21 @@ namespace Bonc_start.Dialogs.NewPostDialogs
             }
         }
 
+        /// <summary>
+        /// Method to end the dialog. 
+        /// </summary>
+        /// <param name="context"></param>
+        /// <param name="response"></param>
+        /// <returns></returns>
         public virtual async Task DialogComplete(IDialogContext context, IAwaitable<object> response)
         {
             context.Done(this);
         }
 
+        /// <summary>
+        /// Platforms that the user can choose from in the prompt.
+        /// Only Facebook implemented at this time.
+        /// </summary>
         public enum Options
         {
             Facebook,

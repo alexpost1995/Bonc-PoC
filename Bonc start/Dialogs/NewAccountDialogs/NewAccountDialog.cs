@@ -93,6 +93,12 @@ namespace Bonc_start.Dialogs
             }
         }
 
+        /// <summary>
+        /// Method to end the dialog. 
+        /// </summary>
+        /// <param name="context"></param>
+        /// <param name="response"></param>
+        /// <returns></returns>
         public virtual async Task DialogComplete(IDialogContext context, IAwaitable<object> response)
         {
             context.Done(this);
