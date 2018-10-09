@@ -17,7 +17,7 @@ namespace Bonc_start.Dialogs
 
         public async Task StartAsync(IDialogContext context)
         {
-            await context.PostAsync(welcomeMessage);
+            //await context.PostAsync(welcomeMessage);
             PromptDialog.Choice(
                 context: context,
                 resume: ChoiceReceivedAsync,

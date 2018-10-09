@@ -64,6 +64,14 @@ namespace Bonc_start.Dialogs.NewPostDialogs
             await context.PostAsync(message);
 
             await MakeAnalysisRequest(imageToPost, context);
+            await context.PostAsync("Ik heb de afbeelding voor je getagd met keywords zodat de afbeelding de volgende keer makkelijk terug te vinden is.");
+            await context.PostAsync("Je bericht is gepost. Wat zou je nu willen doen?");
+            context.Call<object>(new Dialogs.WelcomeBackDialog(), ChildDialogComplete);
+        }
+
+        public virtual async Task ChildDialogComplete(IDialogContext context, IAwaitable<object> response)
+        {
+            context.Done(this);
         }
 
         public enum Options
@@ -124,8 +132,7 @@ namespace Bonc_start.Dialogs.NewPostDialogs
                     JToken.Parse(contentString).ToString());
                 //Tag newTag = JsonConvert.DeserializeObject<Tag>(JToken.Parse(contentString).ToString());
                 //await context.PostAsync(newTag.name.ToString());
-
-                await context.PostAsync($"De geuploade afbeelding is getagd met de volgende keywords: {JToken.Parse(contentString).ToString()}");
+                //await context.PostAsync($"De geuploade afbeelding is getagd met de volgende keywords: {JToken.Parse(contentString).ToString()}");
 
                 //JsonSerializer serializer = new JsonSerializer();
 
