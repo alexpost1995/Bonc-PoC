@@ -1,10 +1,8 @@
 ﻿using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Connector;
-using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -15,18 +13,20 @@ namespace Bonc_start.Dialogs.NewPostDialogs
     [Serializable]
     public class FacebookPostDialog : IDialog<object>
     {
+
         private string welcomeMessage = "Ik zal je een aantal stappen laten doorlopen om een bericht te plaatsen op Facebook.";
         private string promptText = "Wat is de tekst van het bericht dat je zou willen posten?";
         private string promptTextFail = "Kies een van de bovenstaande opties";
 
         private string textToPost;
         private string imageToPost;
-     
-        public class Tag
-        {
-            public string name { get; set; }
-        }
 
+        
+        /// <summary>
+        /// Show welcome message and ask what text the user would like to add to the post.
+        /// </summary>
+        /// <param name="context"></param>
+        /// <returns></returns>
         public async Task StartAsync(IDialogContext context)
         {
             await context.PostAsync(welcomeMessage);
@@ -39,6 +39,12 @@ namespace Bonc_start.Dialogs.NewPostDialogs
                 );
         }
 
+        /// <summary>
+        /// Repeats the text and asks for an image url to add to the post.
+        /// </summary>
+        /// <param name="context"></param>
+        /// <param name="text"></param>
+        /// <returns></returns>
         public virtual async Task ChoiceReceivedAsync(IDialogContext context, IAwaitable<string> text)
         {
             textToPost = await text;
@@ -46,13 +52,21 @@ namespace Bonc_start.Dialogs.NewPostDialogs
 
             PromptDialog.Text(
                 context: context,
-                resume: ChildDialogComplete,
+                resume: PostCreatedAsync,
                 prompt: "Plak de url van de toe te voegen afbeeling in het tekstvak.",
                 retry: promptTextFail
                 );
         }
 
-        public virtual async Task ChildDialogComplete(IDialogContext context, IAwaitable<string> image)
+        /// <summary>
+        /// Creates a new Card with the image and text. 
+        /// MakeAnalysisRequest is being called to provide the image with tags.
+        /// After post is being displayed the user will be sent back to WelcomeBackDialog to start over
+        /// </summary>
+        /// <param name="context"></param>
+        /// <param name="image"></param>
+        /// <returns></returns>
+        public virtual async Task PostCreatedAsync(IDialogContext context, IAwaitable<string> image)
         {
             imageToPost = await image;
 
@@ -66,22 +80,27 @@ namespace Bonc_start.Dialogs.NewPostDialogs
             await MakeAnalysisRequest(imageToPost, context);
             await context.PostAsync("Ik heb de afbeelding voor je getagd met keywords zodat de afbeelding de volgende keer makkelijk terug te vinden is.");
             await context.PostAsync("Je bericht is gepost. Wat zou je nu willen doen?");
-            context.Call<object>(new Dialogs.WelcomeBackDialog(), ChildDialogComplete);
+            context.Call<object>(new Dialogs.WelcomeBackDialog(), DialogComplete);
         }
 
-        public virtual async Task ChildDialogComplete(IDialogContext context, IAwaitable<object> response)
+        /// <summary>
+        /// Method to end the dialog. 
+        /// </summary>
+        /// <param name="context"></param>
+        /// <param name="response"></param>
+        /// <returns></returns>
+        public virtual async Task DialogComplete(IDialogContext context, IAwaitable<object> response)
         {
             context.Done(this);
         }
 
-        public enum Options
-        {
-            Facebook,
-            Instagram,
-            LinkedIn,
-            Twitter
-        }
-
+        /// <summary>
+        /// Creates an attachment for the Facebook post with title, text and imageUrl
+        /// </summary>
+        /// <param name="title"></param>
+        /// <param name="text"></param>
+        /// <param name="imageUrl"></param>
+        /// <returns></returns>
         private static Attachment FacebookPostCard(string title, string text, string imageUrl)
         {
             var heroCard = new HeroCard
@@ -94,6 +113,12 @@ namespace Bonc_start.Dialogs.NewPostDialogs
             return heroCard.ToAttachment();
         }
 
+        /// <summary>
+        /// Sends the image url to Microsoft Computer Vision Api and gets a json file in return with the image tags.
+        /// </summary>
+        /// <param name="imageFilePath"></param>
+        /// <param name="context"></param>
+        /// <returns></returns>
         static async Task MakeAnalysisRequest(string imageFilePath, IDialogContext context)
         {
             const string subscriptionKey = "31495f44467e40e5aa8b017852219356";
@@ -130,20 +155,7 @@ namespace Bonc_start.Dialogs.NewPostDialogs
 
                 Console.WriteLine("\nResponse:\n\n{0}\n",
                     JToken.Parse(contentString).ToString());
-                //Tag newTag = JsonConvert.DeserializeObject<Tag>(JToken.Parse(contentString).ToString());
-                //await context.PostAsync(newTag.name.ToString());
-                //await context.PostAsync($"De geuploade afbeelding is getagd met de volgende keywords: {JToken.Parse(contentString).ToString()}");
-
-                //JsonSerializer serializer = new JsonSerializer();
-
-                //Tag tag = new Tag();
-                //using (StreamWriter sw = new StreamWriter(JToken.Parse(contentString).ToString()))
-                //using (JsonWriter writer = new JsonTextWriter(sw))
-                //{
-                //    serializer.Serialize(writer, tag);
-                //}
-                //await context.PostAsync("abc" + tag.name);
-
+                
             }
             catch (Exception e)
             {
@@ -151,6 +163,11 @@ namespace Bonc_start.Dialogs.NewPostDialogs
             }
         }
 
+        /// <summary>
+        /// Converts the image to byte array.
+        /// </summary>
+        /// <param name="imageFilePath"></param>
+        /// <returns></returns>
         static byte[] GetImageAsByteArray(string imageFilePath)
         {
             using (var webClient = new WebClient())
