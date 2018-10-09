@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
+using AdaptiveCards;
 using Microsoft.Bot.Builder.Dialogs;
+using Microsoft.Bot.Connector;
 
 namespace Bonc_start.Dialogs
 {
@@ -79,6 +82,12 @@ namespace Bonc_start.Dialogs
             if (IsValidEmail(email))
             {
                 await context.PostAsync($"Bedankt voor de informatie, je nieuwe account is aangemaakt.");
+
+                var replyMessage = context.MakeMessage();
+                var att = CreateAdapativecardWithColumn();
+                replyMessage.Attachments.Add(att);
+                await context.PostAsync(replyMessage);
+
                 await context.PostAsync($"Je wordt nu ingelogd en dan kan je beginnen om Bonc te gebruiken.");
                 context.Call<object>(new Dialogs.WelcomeBackDialog(), DialogComplete);
             }
@@ -102,6 +111,77 @@ namespace Bonc_start.Dialogs
         public virtual async Task DialogComplete(IDialogContext context, IAwaitable<object> response)
         {
             context.Done(this);
+        }
+
+        public Attachment CreateAdapativecardWithColumn()
+        {
+            AdaptiveCard card = new AdaptiveCard()
+            {
+                Body = new List<CardElement>()
+    {
+        // Container
+        new Container()
+        {
+            Items = new List<CardElement>()
+            {
+                // first column
+                new ColumnSet()
+                {
+                    Columns = new List<Column>()
+                    {
+                        new Column()
+                        {
+                            Size = ColumnSize.Auto,
+                            Items = new List<CardElement>()
+                            {
+                                new Image()
+                                {
+                                    Url = "http://icons.iconarchive.com/icons/gianni-polito/colobrush/256/software-crystal-msn-icon.png",
+                                    Size = ImageSize.Medium,
+                                    Style = ImageStyle.Person
+                                }
+                            }
+                        },
+                        new Column()
+                        {
+                            Size = "300",
+
+                            Items = new List<CardElement>()
+                            {
+                                new TextBlock()
+                                {
+                                    Text =  "Naam: " + name,
+                                    Weight = TextWeight.Bolder,
+                                    IsSubtle = true
+                                },
+                                 new TextBlock()
+                                {
+                                    Text =  "Bedrijfsnaam: " + companyName,
+                                    Weight = TextWeight.Lighter,
+                                    IsSubtle = true
+                                },
+                                  new TextBlock()
+                                {
+                                    Text =  "Emailadres: " + email,
+                                    Weight = TextWeight.Lighter,
+                                    IsSubtle = true
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+     },
+
+            };
+            Attachment attachment = new Attachment()
+            {
+                ContentType = AdaptiveCard.ContentType,
+                Content = card
+            };
+            return attachment;
+
         }
 
         /// <summary>

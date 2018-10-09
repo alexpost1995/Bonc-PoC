@@ -1,4 +1,5 @@
-﻿using Microsoft.Bot.Builder.Dialogs;
+﻿using AdaptiveCards;
+using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Connector;
 using Newtonsoft.Json.Linq;
 using System;
@@ -74,9 +75,8 @@ namespace Bonc_start.Dialogs.NewPostDialogs
             var message = context.MakeMessage();
             var attachment = FacebookPostCard("", textToPost, imageToPost);
             message.Attachments.Add(attachment);
-
             await context.PostAsync(message);
-
+                        
             await MakeAnalysisRequest(imageToPost, context);
             await context.PostAsync("Ik heb de afbeelding voor je getagd met keywords zodat de afbeelding de volgende keer makkelijk terug te vinden is.");
             await context.PostAsync("Je bericht is gepost. Wat zou je nu willen doen?");
@@ -93,7 +93,7 @@ namespace Bonc_start.Dialogs.NewPostDialogs
         {
             context.Done(this);
         }
-
+               
         /// <summary>
         /// Creates an attachment for the Facebook post with title, text and imageUrl
         /// </summary>

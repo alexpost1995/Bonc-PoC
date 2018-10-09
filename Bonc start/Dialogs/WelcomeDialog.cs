@@ -10,6 +10,7 @@ namespace Bonc_start.Dialogs
     public class WelcomeDialog : IDialog<object>
     {
 
+        private string welcomeTitle = "Je persoonlijke social media assistent";
         private string welcomeMessage = "Hallo, ik ben Bonc, je persoonlijke social media assistent. Ik kan je leven een stuk " +
             "gemakkelijker maken op het gebied van social media, zo kan ik berichten voor je plaatsen, berichten schedulen en " +
             "je suggesties geven over wat je zou kunnen posten op je social media accounts.";
@@ -19,7 +20,11 @@ namespace Bonc_start.Dialogs
 
         public async Task StartAsync(IDialogContext context)
         {
-            await context.PostAsync(welcomeMessage);
+            var message = context.MakeMessage();
+            var attachment = WelcomeCard(welcomeTitle, welcomeMessage);
+            message.Attachments.Add(attachment);
+            await context.PostAsync(message);
+
             context.Wait(this.OptionsPrompt);
         }
 
@@ -77,6 +82,18 @@ namespace Bonc_start.Dialogs
         {
             LogIn,
             NewAccount
+        }
+
+        private static Attachment WelcomeCard(string title, string text)
+        {
+            var heroCard = new HeroCard
+            {
+                Title = title,
+                Subtitle = "",
+                Text = text,
+                Images = new List<CardImage> { new CardImage("https://d1dh93s7n44ml6.cloudfront.net/blog/wp-content/uploads/2017/04/14095449/my-virtual-assistant.jpg") },
+            };
+            return heroCard.ToAttachment();
         }
     }
 }

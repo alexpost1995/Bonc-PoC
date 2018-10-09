@@ -352,3 +352,4 @@ C:\Users\alex.post\Documents\Alex Post\Programmeeropdrachten\Bonc\Bonc-PoC\Bonc 
 C:\Users\alex.post\Documents\Alex Post\Programmeeropdrachten\Bonc\Bonc-PoC\Bonc start\obj\Debug\Bonc start.csproj.CopyComplete
 C:\Users\alex.post\Documents\Alex Post\Programmeeropdrachten\Bonc\Bonc-PoC\Bonc start\obj\Debug\Bonc start.dll
 C:\Users\alex.post\Documents\Alex Post\Programmeeropdrachten\Bonc\Bonc-PoC\Bonc start\obj\Debug\Bonc start.pdb
+C:\Users\alex.post\Documents\Alex Post\Programmeeropdrachten\Bonc\Bonc-PoC\Bonc start\bin\AdaptiveCards.dll
