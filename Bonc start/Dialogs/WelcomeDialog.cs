@@ -18,6 +18,11 @@ namespace Bonc_start.Dialogs
         private string promptTextFail = "Kies een van de bovenstaande opties";
 
 
+        /// <summary>
+        /// Show welcome card
+        /// </summary>
+        /// <param name="context"></param>
+        /// <returns></returns>
         public async Task StartAsync(IDialogContext context)
         {
             var message = context.MakeMessage();
@@ -84,6 +89,12 @@ namespace Bonc_start.Dialogs
             NewAccount
         }
 
+        /// <summary>
+        /// Welcome card attachment, gets called in StartAsync.
+        /// </summary>
+        /// <param name="title"></param>
+        /// <param name="text"></param>
+        /// <returns></returns>
         private static Attachment WelcomeCard(string title, string text)
         {
             var heroCard = new HeroCard

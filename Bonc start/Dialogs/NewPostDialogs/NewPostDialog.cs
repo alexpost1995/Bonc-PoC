@@ -47,24 +47,23 @@ namespace Bonc_start.Dialogs.NewPostDialogs
             {
                 context.Call<object>(new Dialogs.NewPostDialogs.FacebookPostDialog(), DialogComplete);
             }
+            if (response.ToString() == "Twitter")
+            {
+                context.Call<object>(new Dialogs.NewPostDialogs.TwitterPostDialog(), DialogComplete);
+            }
             if (response.ToString() == "Instagram")
             {
                 await context.PostAsync("Deze functionaliteit is nog niet geimplementeerd.");
                 context.Call<object>(new Dialogs.NewPostDialogs.NewPostDialog(), DialogComplete);
-                //context.Call<object>(new Dialogs.NewPostDialogs.InstagramPostDialog(), ChildDialogComplete);
+                //context.Call<object>(new Dialogs.NewPostDialogs.InstagramPostDialog(), DialogComplete);
             }
             if (response.ToString() == "LinkedIn")
             {
                 await context.PostAsync("Deze functionaliteit is nog niet geimplementeerd.");
                 context.Call<object>(new Dialogs.NewPostDialogs.NewPostDialog(), DialogComplete);
-                //context.Call<object>(new Dialogs.NewPostDialogs.LinkedinPostDialog(), ChildDialogComplete);
+                //context.Call<object>(new Dialogs.NewPostDialogs.LinkedinPostDialog(), DialogComplete);
             }
-            if (response.ToString() == "Twitter")
-            {
-                await context.PostAsync("Deze functionaliteit is nog niet geimplementeerd.");
-                context.Call<object>(new Dialogs.NewPostDialogs.NewPostDialog(), DialogComplete);
-                //context.Call<object>(new Dialogs.NewPostDialogs.TwitterPostDialog(), ChildDialogComplete);
-            }
+            
         }
 
         /// <summary>
@@ -85,9 +84,9 @@ namespace Bonc_start.Dialogs.NewPostDialogs
         public enum Options
         {
             Facebook,
+            Twitter,
             Instagram,
-            LinkedIn,
-            Twitter
+            LinkedIn
         }
     }
 }
