@@ -1,12 +1,9 @@
 ﻿using AdaptiveCards;
 using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Connector;
-using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
-using System.Net;
 using System.Net.Http;
-using System.Net.Http.Headers;
 using System.Threading.Tasks;
 
 namespace Bonc_start.Dialogs.NewPostDialogs
@@ -16,14 +13,14 @@ namespace Bonc_start.Dialogs.NewPostDialogs
     {
 
         private string welcomeMessage = "Ik zal je een aantal stappen laten doorlopen om een tweet te kunnen plaatsen.";
-        private string promptText = "Wat is de tekst van het bericht dat je zou willen posten?";
+        private string promptText = "Wat is de tekst van het bericht dat je zou willen posten op Twitter?";
         private string promptTextFail = "Kies een van de bovenstaande opties";
+        private string tweetExample = "Je tweet ziet er als volgt uit:";
 
         private string twitterName = "Alex Post";
         private string twitterTag = "@AlexP";
 
         private string textToPost;
-        private string imageToPost;
 
 
         /// <summary>
@@ -54,7 +51,7 @@ namespace Bonc_start.Dialogs.NewPostDialogs
             textToPost = await text;
             await context.PostAsync($"Ik heb de volgende tekst doorgekregen: '{textToPost}'");
 
-            await context.PostAsync("Je tweet ziet er als volgt uit:");
+            await context.PostAsync(tweetExample);
 
             var message = context.MakeMessage();
             var attachment = CreateTwitterCard(textToPost);
@@ -63,7 +60,6 @@ namespace Bonc_start.Dialogs.NewPostDialogs
 
             await context.PostAsync("Je wordt nu teruggestuurd naar het hoofdmenu");
             context.Call<object>(new Dialogs.WelcomeBackDialog(), DialogComplete);
-
         }
 
         /// <summary>
@@ -77,6 +73,11 @@ namespace Bonc_start.Dialogs.NewPostDialogs
             context.Done(this);
         }
 
+        /// <summary>
+        /// Create a new Twitter attachment.
+        /// </summary>
+        /// <param name="text"></param>
+        /// <returns></returns>
         public Attachment CreateTwitterCard(string text)
         {
             AdaptiveCard card = new AdaptiveCard()
@@ -127,9 +128,7 @@ namespace Bonc_start.Dialogs.NewPostDialogs
                             }
                         }
                     }
-
                 },
-                // second column
                 new ColumnSet()
                 {
                      Columns = new List<Column>()
@@ -152,7 +151,6 @@ namespace Bonc_start.Dialogs.NewPostDialogs
             }
         }
      },
-
             };
             Attachment attachment = new Attachment()
             {
@@ -160,9 +158,6 @@ namespace Bonc_start.Dialogs.NewPostDialogs
                 Content = card
             };
             return attachment;
-
         }
-
-
     }
 }

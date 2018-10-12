@@ -17,7 +17,7 @@ namespace Bonc_start.Dialogs
         /// Method that gets fires when this dialog is called. The prompt will give the user a number of choices.
         /// </summary>
         /// <param name="context"></param>
-        public Task StartAsync(IDialogContext context)
+        public async Task StartAsync(IDialogContext context)
         {
             PromptDialog.Choice(
                 context: context,
@@ -28,7 +28,7 @@ namespace Bonc_start.Dialogs
                 promptStyle: PromptStyle.Auto
                 );
 
-            return Task.CompletedTask;
+            //return Task.CompletedTask;
 
         }
 
